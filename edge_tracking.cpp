@@ -38,6 +38,50 @@ class EdgeTracker {
         return iter;
     }
 
+    int inset(float real, float img){
+
+            // cardioid check
+            float img2= img*img;
+            float q= (real-1.0/4.0)*(real-1.0/4.0) + img2;
+            if ((q*(q+(real-1.0/4.0)))<(1.0/4.0*img2)){
+                // in cardioid
+                return 1;
+            }
+            // period 2 bulb check
+            if (((real+1)*(real+1))+img2<1.0/16.0){
+                return 1; // in period 2 bulb
+            }
+
+
+        float z_real = real;
+        float z_img = img;
+
+        float test_real = z_real;
+        float test_img = z_img;
+        int period = 8 ;
+        int period_index =0;
+        for(int iters = 0; iters < MaxIter; iters++){
+
+            float z2_real = z_real*z_real-z_img*z_img;
+            float z2_img = 2.0*z_real*z_img;
+            z_real = z2_real + real;
+            z_img = z2_img + img;
+            if ((z_real==test_real)&&(z_img==test_img)){
+                return 1;
+            }
+            if(z_real*z_real + z_img*z_img > 4.0) return -1;
+            period_index++;
+            if(period_index==period){
+                test_real= z_real;
+                test_img=z_img;
+                period_index=0;
+                period *= 2;
+            }
+
+        }
+        return 1;
+    }
+
     void AddQueue(unsigned p) {
         if (Done[p] & Queued) return;
         Done[p] |= Queued;
