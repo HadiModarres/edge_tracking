@@ -10,7 +10,7 @@ int main(){
 
     time (&begin); // note time before execution
     EdgeTracker* et = new EdgeTracker();
-    printf("total count: %d\n",et->pointsInRegion(-0.5,0.5,-0.3,0.3,10000,10000,10000));
+    printf("total count: %d\n",et->pointsInRegion(-1.0,0.5,-0.6,0.6,10000,2000,2000));
     time (&end); // note time after execution
 
     double difference = difftime (end,begin);
